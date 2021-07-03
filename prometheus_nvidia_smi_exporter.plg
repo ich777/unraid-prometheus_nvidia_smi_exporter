@@ -1,0 +1,78 @@
+<?xml version='1.0' standalone='yes'?>
+<!DOCTYPE PLUGIN [
+  <!ENTITY name      "prometheus_nvidia_smi_exporter">
+  <!ENTITY author    "ich777">
+  <!ENTITY version   "2021.07.03">
+  <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/unraid-&name;/master">
+  <!ENTITY pluginURL "&gitURL;/&name;.plg">
+  <!ENTITY md5       "26bf987c60a306eabbcca146f26c51d8">
+  <!ENTITY plugin    "/boot/config/plugins/&name;">
+  <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
+]>
+
+<PLUGIN  name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;" min="6.9.0">
+
+<CHANGES>
+
+###2021.07.03
+- Initial release
+
+</CHANGES>
+
+<FILE Run="/bin/bash">
+<INLINE>
+rm -f $(ls /boot/config/plugins/&name;/&name;*.txz 2>/dev/null|grep -v '&version;')
+</INLINE>
+</FILE>
+
+<FILE Name="/boot/config/plugins/&name;/&name;-&version;.tgz" Run="upgradepkg --install-new">
+<URL>&gitURL;/packages/&name;-&version;.tgz</URL>
+<MD5>&md5;</MD5>
+</FILE>
+
+<FILE Name="&emhttp;/README.md">
+<INLINE>
+**Prometheus nvidia-smi Exporter**
+
+Is a slim plugin, that takes informations gathered from nvidia-smi and provides it to a Prometheus database. Usage is not limited to Prometheus only. Data can be formated and displayed to any database or graphical node.  
+Export URL: The URL for the exportet metrics is: 'http://YOURunRAIDIP:9202/metrics' (to use it in Prometheus add the target: 'YOURunRAIDIP:9202' to your Prometheus yaml).  
+This Plugin is based on: https://github.com/e7d/docker-prometheus-nvidiasmi
+</INLINE>
+</FILE>
+
+<FILE Run="/bin/bash">
+<INLINE>
+
+echo
+if [ -z "$(pidof prometheus_nvidia_smi_exporter)" ]; then
+  echo "----Staring prometheus_nvidia_smi_exporter on default port: 9202----"
+  echo
+  echo "/usr/bin/prometheus_nvidia_smi_exporter 2>/dev/null" | at now
+else
+  echo "---Nothing to do, prometheus_nvidia_smi_exporter already started!---"
+  echo
+fi
+
+</INLINE>
+</FILE>
+
+<FILE Run="/bin/bash" Method="remove">
+<INLINE>
+
+echo "-------------------------------------------------"
+echo "---Uninstalling prometheus_nvidia_smi_exporter---"
+echo "-------------------------------------------------"
+# Remove plugin related files
+kill "$(pidof prometheus_nvidia_smi_exporter)" 2>/dev/null
+removepkg &name;-&version;
+rm -rf /usr/local/emhttp/plugins/&name;
+rm -rf &plugin;
+echo
+echo "----------------------------------------------------------------"
+echo "---Uninstallation of prometheus_nvidia_smi_exporter complete!---"
+echo "----------------------------------------------------------------"
+echo
+
+</INLINE>
+</FILE>
+</PLUGIN>
