@@ -2,10 +2,10 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name      "prometheus_nvidia_smi_exporter">
   <!ENTITY author    "ich777">
-  <!ENTITY version   "2021.07.03">
+  <!ENTITY version   "2021.09.21">
   <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/unraid-&name;/master">
   <!ENTITY pluginURL "&gitURL;/&name;.plg">
-  <!ENTITY md5       "26bf987c60a306eabbcca146f26c51d8">
+  <!ENTITY md5       "ee42b236efb6eee11c688177b07bcdc5">
   <!ENTITY plugin    "/boot/config/plugins/&name;">
   <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
@@ -13,6 +13,10 @@
 <PLUGIN  name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;" min="6.9.0" support="https://forums.unraid.net/topic/110995-plugin-prometheus-unraid-plugins/">
 
 <CHANGES>
+
+###2021.09.21
+- Bumped version to latest master branch from 2021.09.21
+- Various fixes, thanks to Michaël Ferrand
 
 ###2021.07.03
 - Initial release
